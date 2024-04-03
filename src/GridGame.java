@@ -42,9 +42,9 @@ public class GridGame {
         }
     }
 
-    // helper method: there's a 33% chance for treasure to spawn at a space
+    // helper method: there's a 20% chance for treasure to spawn at a space
     public boolean randTreasureLocation() {
-        int num = (int) (Math.random() * 3) + 1;
+        int num = (int) (Math.random() * 5) + 1;
         return num == 3;
     }
 
@@ -66,7 +66,7 @@ public class GridGame {
     private void printBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int k = 0; k < board[0].length; k++) {
-                System.out.println(board[i][k].getSymbol());
+                System.out.print(board[i][k].getSymbol());
             }
             System.out.println();
         }
@@ -86,21 +86,20 @@ public class GridGame {
         // if the player reaches the goal, end the game and print their final score and the number of moves it took
         while (!(board[0][7].equals(player.getSymbol()))) {
             printBoard();
-            System.out.println("Enter either W, A, S, or D");
+            System.out.print("Enter either W, A, S, or D");
             String response = scanner.nextLine();
 
             if ((!response.equals("W")) && (!response.equals("A")) & (!response.equals("S")) && (!response.equals("D"))) {
                 System.out.println("Invalid Response! W, A, S, or D!");
             } else {
-                
+                moveASpace(response);
             }
-
-
         }
+        System.out.println("Victory! You've won " + player.getScore());
     }
 
     // more helper methods
-    public void move(String response) {
+    public void moveASpace(String response) {
         if (response.equals("W")) {
             moveUp();
         } else if (response.equals("A")) {
@@ -153,11 +152,12 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (row != 0) {
-            if (board[row][col].getSymbol().equals("$")) {
-                player.addPoints(((Treasure) board[row][col - 1]).getPointValue());
+            if (board[row + 1][col].getSymbol().equals("$")) {
+                player.addPoints(((Treasure) board[row + 1][col]).getPointValue());
             }
             board[row + 1][col] = player;
             board[row][col] = new Space("_");
+            player.move();
         } else {
             System.out.println("You can't do that!");
         }
@@ -167,8 +167,12 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (col != 7) {
+            if (board[row - 1][col].getSymbol().equals("$")) {
+                player.addPoints(((Treasure) board[row - 1][col]).getPointValue());
+            }
             board[row - 1][col] = player;
             board[row][col] = new Space("_");
+            player.move();
         } else {
             System.out.println("You can't do that!");
         }
@@ -178,8 +182,12 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (col != 7) {
+            if (board[row][col + 1].getSymbol().equals("$")) {
+                player.addPoints(((Treasure) board[row][col + 1]).getPointValue());
+            }
             board[row][col + 1] = player;
             board[row][col] = new Space("_");
+            player.move();
         } else {
             System.out.println("You can't do that!");
         }
