@@ -139,10 +139,11 @@ public class GridGame {
         int col = findPlayerColumn();
         if (col != 0) {
             if (board[row][col - 1].getSymbol().equals("$")) {
-                /// ???? this is hard;
+                player.addPoints(((Treasure) board[row][col - 1]).getPointValue());
             }
             board[row][col - 1] = player;
             board[row][col] = new Space("_");
+            player.move();
         } else {
             System.out.println("You can't do that!");
         }
@@ -152,6 +153,9 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (row != 0) {
+            if (board[row][col].getSymbol().equals("$")) {
+                player.addPoints(((Treasure) board[row][col - 1]).getPointValue());
+            }
             board[row + 1][col] = player;
             board[row][col] = new Space("_");
         } else {
