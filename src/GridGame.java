@@ -79,6 +79,7 @@ public class GridGame {
         // if player moves to a position occupied by a Treasure, add its point value to the players score,
         // and replace that element with a Space object (with "_" symbol).
         // if the player reaches the goal, end the game and print their final score and the number of moves it took
+        System.out.println("Collect all treasures to win!");
         while (!(board[0][7] instanceof Player)) {
             printBoard();
             System.out.print("Enter either W, A, S, or D");
@@ -90,10 +91,25 @@ public class GridGame {
                 moveASpace(response);
             }
         }
-        System.out.println("Victory! You've won " + player.getScore() + " points!");
+        if (treasuresPresent()) {
+            System.out.println("Defeat! You did not collect all the treasures!\nTotal Points: " + player.getScore());
+        } else {
+            System.out.println("Victory! All treasures collected!\nTotal Points: " + player.getScore());
+        }
     }
 
     // more helper methods
+    public boolean treasuresPresent() {
+        for (int i = 0; i < board.length; i++) {
+            for (int k = 0; k < board[0].length; k++) {
+                if (board[i][k] instanceof Treasure) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void moveASpace(String response) {
         if (response.equals("W")) {
             moveUp();
