@@ -33,7 +33,7 @@ public class GridGame {
             for (int k = 0; k < board[0].length; k++) {
                 if (board[i][k] == null) {
                     if (randTreasureLocation()) {
-                        board[i][k] = new Treasure("$", randPointValue());
+                        board[i][k] = new Treasure("$", 10);
                     } else {
                         board[i][k] = new Space("_");
                     }
@@ -46,11 +46,6 @@ public class GridGame {
     public boolean randTreasureLocation() {
         int num = (int) (Math.random() * 5) + 1;
         return num == 3;
-    }
-
-    // helper method: returns a random point value for a piece of treasure (1-50)
-    public int randPointValue() {
-        return (int) (Math.random() * 30) + 1;
     }
 
     /* prints the 2D array board, showing the symbol for each Space, e.g.
@@ -84,7 +79,7 @@ public class GridGame {
         // if player moves to a position occupied by a Treasure, add its point value to the players score,
         // and replace that element with a Space object (with "_" symbol).
         // if the player reaches the goal, end the game and print their final score and the number of moves it took
-        while (!(board[0][7].equals(player.getSymbol()))) {
+        while (!(board[0][7] instanceof Player)) {
             printBoard();
             System.out.print("Enter either W, A, S, or D");
             String response = scanner.nextLine();
@@ -95,7 +90,7 @@ public class GridGame {
                 moveASpace(response);
             }
         }
-        System.out.println("Victory! You've won " + player.getScore());
+        System.out.println("Victory! You've won " + player.getScore() + " points!");
     }
 
     // more helper methods
@@ -114,7 +109,7 @@ public class GridGame {
     public int findPlayerRow() {
         for (int i = 0; i < board.length; i++) {
             for (int k = 0; k < board[0].length; k++) {
-                if (board[i][k].equals(player.getSymbol())) {
+                if (board[i][k] instanceof Player) {
                     return i;
                 }
             }
@@ -125,7 +120,7 @@ public class GridGame {
     public int findPlayerColumn() {
         for (int i = 0; i < board.length; i++) {
             for (int k = 0; k < board[0].length; k++) {
-                if (board[i][k].equals(player.getSymbol())) {
+                if (board[i][k] instanceof Player) {
                     return k;
                 }
             }
@@ -137,7 +132,7 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (col != 0) {
-            if (board[row][col - 1].getSymbol().equals("$")) {
+            if (board[row][col - 1] instanceof Treasure) {
                 player.addPoints(((Treasure) board[row][col - 1]).getPointValue());
             }
             board[row][col - 1] = player;
@@ -152,10 +147,10 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (row != 0) {
-            if (board[row + 1][col].getSymbol().equals("$")) {
-                player.addPoints(((Treasure) board[row + 1][col]).getPointValue());
+            if (board[row - 1][col] instanceof Treasure) {
+                player.addPoints(((Treasure) board[row - 1][col]).getPointValue());
             }
-            board[row + 1][col] = player;
+            board[row - 1][col] = player;
             board[row][col] = new Space("_");
             player.move();
         } else {
@@ -167,10 +162,10 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (col != 7) {
-            if (board[row - 1][col].getSymbol().equals("$")) {
-                player.addPoints(((Treasure) board[row - 1][col]).getPointValue());
+            if (board[row + 1][col] instanceof Treasure) {
+                player.addPoints(((Treasure) board[row + 1][col]).getPointValue());
             }
-            board[row - 1][col] = player;
+            board[row + 1][col] = player;
             board[row][col] = new Space("_");
             player.move();
         } else {
@@ -182,7 +177,7 @@ public class GridGame {
         int row = findPlayerRow();
         int col = findPlayerColumn();
         if (col != 7) {
-            if (board[row][col + 1].getSymbol().equals("$")) {
+            if (board[row][col + 1] instanceof Treasure) {
                 player.addPoints(((Treasure) board[row][col + 1]).getPointValue());
             }
             board[row][col + 1] = player;
