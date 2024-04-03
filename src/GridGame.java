@@ -96,6 +96,7 @@ public class GridGame {
         } else {
             System.out.println("Victory! All treasures collected!\nTotal Points: " + player.getScore());
         }
+        System.out.println("Total Moves Taken: " + player.getMoves());
     }
 
     // more helper methods
